@@ -4,8 +4,11 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 
 def analyze_partition(partition_path):
+    output_file = "data.txt"
     if not os.path.exists(partition_path):
-        print(f"Path {partition_path} does not exist.")
+        with open(output_file, "w") as f:
+            f.write(f"Path {partition_path} does not exist.\n")
+        print(f"Path {partition_path} does not exist. Output written to {output_file}")
         return
 
     total_directories = 0
@@ -24,9 +27,8 @@ def analyze_partition(partition_path):
             try:
                 file_extensions_count[ext] += 1
                 file_extensions_size[ext] += os.path.getsize(file_path)
-            except (FileNotFoundError, PermissionError): # files that are inaccessible or deleted
+            except (FileNotFoundError, PermissionError):  # files that are inaccessible or deleted
                 continue
-
 
     # pie chart data
     top_10_by_count = sorted(file_extensions_count.items(), key=lambda x: x[1], reverse=True)[:10]
@@ -59,15 +61,18 @@ def analyze_partition(partition_path):
     plt.tight_layout()
     plt.show()
 
-    #terminal output
-    print(f"Number of directories: {total_directories}")
-    print(f"Number of files: {total_files}")
-    print("\nFile Extensions Summary:")
-    print("{:<25} {:<25} {:<25}".format("Extension", "Count", "Total Size (bytes)"))
-    print("-" * 75)
+    # file output
+    with open(output_file, "w") as f:
+        f.write(f"Number of directories: {total_directories}\n")
+        f.write(f"Number of files: {total_files}\n\n")
+        f.write("File Extensions Summary:\n")
+        f.write("{:<25} {:<25} {:<25}\n".format("Extension", "Count", "Total Size (bytes)"))
+        f.write("-" * 75 + "\n")
 
-    for ext in sorted(file_extensions_count.keys(), key=lambda x: file_extensions_size[x], reverse=True):
-        print(f"{ext:<25} {file_extensions_count[ext]:<25} {file_extensions_size[ext]:<25}")
+        for ext in sorted(file_extensions_count.keys(), key=lambda x: file_extensions_size[x], reverse=True):
+            f.write(f"{ext:<25} {file_extensions_count[ext]:<25} {file_extensions_size[ext]:<25}\n")
+
+    print(f"Output written to {output_file}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
