@@ -63,11 +63,11 @@ def analyze_partition(partition_path):
     print(f"Number of directories: {total_directories}")
     print(f"Number of files: {total_files}")
     print("\nFile Extensions Summary:")
-    print("{:<15} {:<15} {:<15}".format("Extension", "Count", "Total Size (bytes)"))
-    print("-" * 45)
+    print("{:<25} {:<25} {:<25}".format("Extension", "Count", "Total Size (bytes)"))
+    print("-" * 75)
 
     for ext in sorted(file_extensions_count.keys(), key=lambda x: file_extensions_size[x], reverse=True):
-        print(f"{ext:<15} {file_extensions_count[ext]:<15} {file_extensions_size[ext]:<15}")
+        print(f"{ext:<25} {file_extensions_count[ext]:<25} {file_extensions_size[ext]:<25}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
